@@ -33,8 +33,11 @@ export function Install() {
         <p className="-mt-7 mb-10 font-mono text-[11px] text-muted sm:hidden">← 옆으로 밀어서 보기</p>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
           {installSteps.map((s) => (
-            <div key={s.n} className="flex flex-col gap-3.5 border-t border-ink pt-5">
-              <span className="font-mono text-[12px] font-medium text-accent">STEP {s.n}</span>
+            <div key={s.n} className="flex flex-col gap-3.5">
+              <div className="aspect-[468/512] overflow-hidden rounded-md bg-well">
+                <Photo src={s.img} alt={`${s.title} 사진`} sizes="(min-width: 1320px) 400px, (min-width: 768px) 33vw, 100vw" />
+              </div>
+              <span className="mt-2 border-t border-ink pt-5 font-mono text-[12px] font-medium text-accent">STEP {s.n}</span>
               <h3 className="m-0 text-[20px] font-bold tracking-[-0.02em] md:text-[22px]">{s.title}</h3>
               <p className="m-0 text-[15px] leading-[1.75] text-pretty text-body">{s.body}</p>
             </div>
