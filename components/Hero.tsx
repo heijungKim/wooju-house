@@ -17,7 +17,7 @@ export default function Hero({ layout }: { layout: "full" | "split" }) {
       {layout === "full" ? (
         <div className="relative h-[min(86vh,820px)] min-h-[520px] overflow-hidden bg-[#cfd3d6]">
           <div className="absolute inset-0">
-            <Photo src="/img/hero.png" alt="우주하우스 대표 외관" priority />
+            <Photo src="/img/hero.jpg" alt="우주하우스 대표 외관" priority />
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-[linear-gradient(to_top,rgba(14,15,17,.72),rgba(14,15,17,0))]" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0">
@@ -46,7 +46,7 @@ export default function Hero({ layout }: { layout: "full" | "split" }) {
             </a>
           </div>
           <div className="aspect-[4/3] overflow-hidden rounded-md">
-            <Photo src="/img/hero.png" alt="우주하우스 대표 외관" sizes="(min-width: 1000px) 640px, 100vw" priority />
+            <Photo src="/img/hero.jpg" alt="우주하우스 대표 외관" sizes="(min-width: 1000px) 640px, 100vw" priority />
           </div>
         </div>
       )}

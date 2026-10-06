@@ -40,7 +40,7 @@ export function Interior() {
     <section id="interior" className="mx-auto max-w-[1320px] scroll-mt-[68px] px-8 py-28">
       <SectionHead eyebrow="03 — INTERIOR" title="인테리어 디테일" />
       <div className="mb-14 aspect-[21/9] overflow-hidden rounded-md bg-well">
-        <Photo src="/img/interior.png" alt="실내 전경" sizes="(min-width: 1320px) 1256px, 100vw" />
+        <Photo src="/img/interior.jpg" alt="실내 전경" sizes="(min-width: 1320px) 1256px, 100vw" />
       </div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-14">
         <NumberedList title="표준배합시스템" items={standardSystems} />
@@ -56,7 +56,7 @@ export function Install() {
       <div className="mx-auto max-w-[1320px] px-8 py-28">
         <SectionHead eyebrow="04 — INSTALLATION" title="안전한 설치방법" />
         <div className="mb-12 aspect-[3/1] overflow-hidden rounded-md bg-white">
-          <Photo src="/img/install.png" alt="설치 과정 일러스트" fit="contain" sizes="(min-width: 1320px) 1256px, 100vw" />
+          <Photo src="/img/install.jpg" alt="설치 과정 일러스트" fit="contain" sizes="(min-width: 1320px) 1256px, 100vw" />
         </div>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-10">
           {installSteps.map((s) => (

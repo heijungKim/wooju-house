@@ -50,10 +50,10 @@ export const modelTypes: ModelType[] = ["주택형", "영업형", "확장형"];
 
 /** 모델별 이미지 경로. 설계도면(dwg)은 아직 없음 — 파일을 넣고 경로를 채우면 표시됨. */
 export const modelImages = (key: string) => ({
-  side: `/img/${key}-side.png`,
-  ext: `/img/${key}-ext.png`,
-  int: `/img/${key}-int.png`,
-  plan: `/img/${key}-plan.png`,
+  side: `/img/${key}-side.jpg`,
+  ext: `/img/${key}-ext.jpg`,
+  int: `/img/${key}-int.jpg`,
+  plan: `/img/${key}-plan.jpg`,
   dwg: undefined as string | undefined,
 });
 
@@ -104,12 +104,12 @@ export const workPhotos: { label: string; placeholder: string; src?: string }[] 
   { label: "운송 · 설치", placeholder: "작업사진 · 설치" },
 ];
 
-export const cases = [1, 2, 3, 4, 5, 6].map((i) => `/img/case${i}.png`);
+export const cases = [1, 2, 3, 4, 5, 6].map((i) => `/img/case${i}.jpg`);
 
 export const sites = [
-  { src: "/img/camp.png", label: "캠프장 계획" },
-  { src: "/img/resort.png", label: "프리미엄 리조트 개발 시안" },
-  { src: "/img/island.png", label: "프리미엄 리조트 개발 시안 · 수변" },
+  { src: "/img/camp.jpg", label: "캠프장 계획" },
+  { src: "/img/resort.jpg", label: "프리미엄 리조트 개발 시안" },
+  { src: "/img/island.jpg", label: "프리미엄 리조트 개발 시안 · 수변" },
 ];
 
 export const contact = [
