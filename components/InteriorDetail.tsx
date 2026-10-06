@@ -34,14 +34,14 @@ export default function InteriorDetail() {
   });
 
   return (
-    <section id="interior" className="mx-auto max-w-[1320px] scroll-mt-[68px] px-8 py-28">
-      <div className="mb-12 flex flex-col gap-3.5">
+    <section id="interior" className="mx-auto max-w-[1320px] scroll-mt-[68px] px-5 sm:px-8 py-[72px] md:py-28">
+      <div className="mb-8 flex flex-col md:mb-12 gap-3.5">
         <Eyebrow>03 — INTERIOR</Eyebrow>
         <SectionTitle>인테리어 디테일</SectionTitle>
       </div>
 
       <div className="grid gap-10 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:gap-14">
-        <div ref={areaRef} className="flex min-w-0 flex-col gap-10 lg:order-2">
+        <div ref={areaRef} className="flex min-w-0 flex-col gap-8 md:gap-10 lg:order-2">
           <div className="relative isolate aspect-[2075/859]">
             <div className="absolute inset-0 overflow-hidden rounded-md bg-well">
               <Photo src="/img/interior.jpg" alt="인테리어 전경" sizes="(min-width: 1320px) 900px, 100vw" />
@@ -73,6 +73,21 @@ export default function InteriorDetail() {
               );
             })}
             {active !== null && <Bubble f={interiorFeatures[active]} />}
+          </div>
+
+          {/* 모바일: 사진이 작아 말풍선 대신 사진 바로 아래에 설명 표시 */}
+          <div aria-live="polite" className="-mt-6 min-h-[92px] rounded-md bg-white px-4 py-3.5 sm:hidden">
+            {active === null ? (
+              <p className="m-0 flex h-full min-h-[64px] items-center text-[14px] text-muted">사진의 번호를 누르면 설명을 볼 수 있어요.</p>
+            ) : (
+              <>
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="flex size-5 items-center justify-center rounded-full bg-accent font-mono text-[10px] font-medium text-paper">{active + 1}</span>
+                  <span className="text-[15px] font-bold">{interiorFeatures[active].title}</span>
+                </div>
+                <p className="m-0 text-[14px] leading-[1.6] text-body">{interiorFeatures[active].body}</p>
+              </>
+            )}
           </div>
 
           <ol className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-x-5 gap-y-4 p-0">
@@ -123,7 +138,7 @@ function Bubble({ f }: { f: (typeof interiorFeatures)[number] }) {
     <div
       role="tooltip"
       style={{ left: `${f.x}%`, top: `${f.y}%` }}
-      className={`pointer-events-none absolute z-30 w-[min(280px,78vw)] ${x} ${below ? "pt-[clamp(20px,2.2vw,26px)]" : "-translate-y-full pb-[clamp(20px,2.2vw,26px)]"}`}
+      className={`pointer-events-none absolute z-30 hidden w-[min(280px,78vw)] sm:block ${x} ${below ? "pt-[clamp(20px,2.2vw,26px)]" : "-translate-y-full pb-[clamp(20px,2.2vw,26px)]"}`}
     >
       <div className="animate-[bubble_.18s_ease-out] rounded-md bg-ink px-4 pt-3 pb-3.5 text-paper shadow-[0_10px_30px_rgba(0,0,0,.3)]">
         <div className="mb-1 flex items-baseline gap-2">

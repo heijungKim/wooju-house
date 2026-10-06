@@ -11,7 +11,7 @@ export function Eyebrow({ children, dark = false }: { children: React.ReactNode;
 
 export function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <h2 className={`m-0 text-[length:clamp(32px,4vw,52px)] font-bold tracking-[-0.03em] ${className}`}>{children}</h2>
+    <h2 className={`m-0 text-[length:clamp(28px,4vw,52px)] font-bold tracking-[-0.03em] ${className}`}>{children}</h2>
   );
 }
 
