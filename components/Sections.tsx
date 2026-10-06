@@ -24,13 +24,6 @@ export function Install() {
     <section id="install" className="scroll-mt-[68px] bg-paper-2">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8 py-[72px] md:py-28">
         <SectionHead eyebrow="04 — INSTALLATION" title="안전한 설치방법" />
-        {/* 모바일에서는 일러스트가 너무 작아져 가로로 밀어서 보도록 */}
-        <div className="-mx-5 mb-10 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0 md:mb-12 [&::-webkit-scrollbar]:hidden">
-          <div className="aspect-[3/1] min-w-[640px] overflow-hidden rounded-md bg-white sm:min-w-0">
-            <Photo src="/img/install.jpg" alt="설치 과정 일러스트" fit="contain" sizes="(min-width: 1320px) 1256px, 640px" />
-          </div>
-        </div>
-        <p className="-mt-7 mb-10 font-mono text-[11px] text-muted sm:hidden">← 옆으로 밀어서 보기</p>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
           {installSteps.map((s) => (
             <div key={s.n} className="flex flex-col gap-3.5">
