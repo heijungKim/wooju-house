@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#f4f3ef;color:#17181a;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:#17181a;text-decoration:none}
+a:hover{color:#9a6f25}
+</style>
+</helmet>
+
+<header style="position:sticky;top:0;z-index:20;background:rgba(244,243,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(23,24,26,.1)">
+  <div style="max-width:1320px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="#top" style="display:flex;align-items:baseline;gap:10px;white-space:nowrap;flex:none">
+      <span style="font-size:20px;font-weight:800;letter-spacing:-0.02em">우주하우스</span>
+      <span style="font:500 11px 'IBM Plex Mono',monospace;color:#6b6a66;letter-spacing:.08em">WOOJU HOUSE</span>
+    </a>
+    <nav style="display:flex;gap:clamp(14px,2vw,28px);font-size:15px;font-weight:500;white-space:nowrap;overflow-x:auto;min-width:0">
+      <a href="#products">제품 라인업</a>
+      <a href="#compare">사양 비교</a>
+      <a href="#interior">인테리어</a>
+      <a href="#install">설치</a>
+      <a href="#cases">시공 사례</a>
+      <a href="#contact">문의</a>
+    </nav>
+  </div>
+</header>
+
+<section id="top" data-screen-label="Hero">
+  <sc-if value="{{ heroFull }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;height:min(86vh,820px);min-height:520px;background:#cfd3d6;overflow:hidden">
+      <div style="position:absolute;inset:0">
+        <image-slot id="hero-main" shape="rect" src="img/hero.png" placeholder="대표 외관 사진"></image-slot>
+      </div>
+      <div style="position:absolute;inset:auto 0 0 0;height:60%;background:linear-gradient(to top,rgba(14,15,17,.72),rgba(14,15,17,0));pointer-events:none"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;pointer-events:none">
+        <div style="max-width:1320px;margin:0 auto;padding:0 32px 64px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;color:#f4f3ef">
+          <div style="max-width:720px">
+            <div style="font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.12em;margin-bottom:20px;color:#e6c98f">MODULAR CAPSULE HOUSE</div>
+            <h1 style="margin:0;font-size:clamp(40px,6vw,80px);line-height:1.08;font-weight:700;letter-spacing:-0.035em">공장에서 완성해<br>그대로 옮겨 놓는 집</h1>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:20px;max-width:360px;pointer-events:auto">
+            <p style="margin:0;font-size:17px;line-height:1.65;color:rgba(244,243,239,.9)">우주선 캡슐하우스 주문 제작 전문기업. 주택형 · 영업형 · 확장형 6개 모델을 설계부터 생산, 설치까지 직접 책임집니다.</p>
+            <a href="#products" style="align-self:flex-start;background:#f4f3ef;color:#17181a;padding:14px 22px;border-radius:999px;font-size:15px;font-weight:600;white-space:nowrap">제품 보기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ heroSplit }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1320px;margin:0 auto;padding:56px 32px 72px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:28px">
+        <div style="font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">MODULAR CAPSULE HOUSE</div>
+        <h1 style="margin:0;font-size:clamp(40px,5.4vw,76px);line-height:1.08;font-weight:700;letter-spacing:-0.035em">공장에서 완성해<br>그대로 옮겨 놓는 집</h1>
+        <p style="margin:0;font-size:18px;line-height:1.65;color:#4a4a47;max-width:460px">우주선 캡슐하우스 주문 제작 전문기업. 주택형 · 영업형 · 확장형 6개 모델을 설계부터 생산, 설치까지 직접 책임집니다.</p>
+        <a href="#products" style="align-self:flex-start;background:#17181a;color:#f4f3ef;padding:14px 22px;border-radius:999px;font-size:15px;font-weight:600;white-space:nowrap">제품 보기</a>
+      </div>
+      <div style="aspect-ratio:4/3;border-radius:6px;overflow:hidden">
+        <image-slot id="hero-split" shape="rect" src="img/hero.png" placeholder="대표 외관 사진"></image-slot>
+      </div>
+    </div>
+  </sc-if>
+</section>
+
+<section id="products" data-screen-label="Products" style="max-width:1320px;margin:0 auto;padding:112px 32px 40px;scroll-margin-top:68px">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:40px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">01 — LINEUP</div>
+      <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em;line-height:1.15">제품 라인업</h2>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+        <button onClick="{{ f.onClick }}" style="display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;font:inherit;font-size:15px;font-weight:500;padding:10px 18px;border-radius:999px;cursor:pointer;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.color }}">{{ f.label }} <span style="font:400 12px 'IBM Plex Mono',monospace;opacity:.6">{{ f.count }}</span></button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{ gridView }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:20px">
+      <sc-for list="{{ visible }}" as="m" hint-placeholder-count="6">
+        <button onClick="{{ m.onSelect }}" style="font:inherit;text-align:left;cursor:pointer;background:#fff;border:1px solid {{ m.cardBorder }};box-shadow:{{ m.cardShadow }};border-radius:6px;padding:0;display:flex;flex-direction:column;overflow:hidden;color:#17181a">
+          <div style="aspect-ratio:16/10;background:#fff;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;border-bottom:1px solid rgba(23,24,26,.08)">
+            <img src="{{ m.side }}" alt="{{ m.code }}" style="width:100%;height:100%;object-fit:contain">
+          </div>
+          <div style="padding:22px 24px 24px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+              <span style="font-size:34px;font-weight:700;letter-spacing:-0.03em">{{ m.code }}</span>
+              <span style="font-size:14px;font-weight:600;color:#9a6f25">{{ m.type }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid rgba(23,24,26,.1);padding-top:14px">
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">AREA</span>
+                <span style="font-size:16px;font-weight:600">{{ m.area }}㎡</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">L × W × H</span>
+                <span style="font-size:16px;font-weight:600">{{ m.dims }}</span>
+              </div>
+            </div>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ listView }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;border-top:1px solid rgba(23,24,26,.15)">
+      <sc-for list="{{ visible }}" as="m" hint-placeholder-count="6">
+        <button onClick="{{ m.onSelect }}" style="font:inherit;text-align:left;cursor:pointer;background:{{ m.rowBg }};border:0;border-bottom:1px solid rgba(23,24,26,.15);padding:20px 8px;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr) auto;gap:32px;align-items:center;color:#17181a">
+          <img src="{{ m.side }}" alt="{{ m.code }}" style="width:100%;height:96px;object-fit:contain;background:#fff;border-radius:4px">
+          <div style="display:flex;align-items:baseline;gap:20px;flex-wrap:wrap">
+            <span style="font-size:36px;font-weight:700;letter-spacing:-0.03em;min-width:90px">{{ m.code }}</span>
+            <span style="font-size:16px;font-weight:600;color:#9a6f25">{{ m.title }}</span>
+          </div>
+          <div style="display:flex;gap:28px;font:500 14px 'IBM Plex Mono',monospace;color:#4a4a47">
+            <span>{{ m.area }}㎡</span>
+            <span>{{ m.dims }}</span>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+</section>
+
+<section ref="{{ detailRef }}" data-screen-label="Product detail" style="max-width:1320px;margin:0 auto;padding:40px 32px 120px;scroll-margin-top:68px">
+  <sc-for list="{{ models }}" as="m" hint-placeholder-count="1">
+    <div style="display:{{ m.display }};flex-direction:column;gap:20px;background:#fff;border-radius:8px;padding:clamp(20px,3vw,40px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(24px,4vw,56px)">
+        <div style="position:relative;aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#e7e6e1">
+          <sc-if value="{{ m.showPhoto }}" hint-placeholder-val="{{ true }}">
+            <image-slot id="{{ m.key }}-ext" shape="rect" src="{{ m.ext }}" placeholder="외관 사진"></image-slot>
+          </sc-if>
+          <sc-if value="{{ m.show3d }}" hint-placeholder-val="{{ false }}">
+            <iframe src="{{ m.src3d }}" title="{{ m.code }} 3D" style="display:block;width:100%;height:100%;border:0"></iframe>
+          </sc-if>
+          <div style="position:absolute;top:14px;left:14px;display:flex;gap:2px;padding:3px;background:rgba(23,24,26,.82);border-radius:999px;backdrop-filter:blur(6px)">
+            <button onClick="{{ showPhotoView }}" style="font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border:0;border-radius:999px;cursor:pointer;white-space:nowrap;background:{{ photoBtnBg }};color:{{ photoBtnColor }}">사진</button>
+            <button onClick="{{ show3dView }}" style="font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border:0;border-radius:999px;cursor:pointer;white-space:nowrap;background:{{ btn3dBg }};color:{{ btn3dColor }}">3D 회전</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:28px;padding-top:8px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">MODEL {{ m.code }}</span>
+            <h3 style="margin:0;font-size:clamp(30px,3.4vw,44px);font-weight:700;letter-spacing:-0.03em;line-height:1.15">{{ m.title }}</h3>
+          </div>
+          <p style="margin:0;font-size:17px;line-height:1.75;color:#3a3a38;text-wrap:pretty">{{ m.desc }}</p>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #17181a">
+            <div style="display:flex;flex-direction:column;gap:6px;padding:16px 12px 0 0">
+              <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">길이</span>
+              <span style="font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ m.l }}<span style="font-size:14px;font-weight:500;margin-left:2px">m</span></span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:16px 12px 0 0">
+              <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">폭</span>
+              <span style="font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ m.w }}<span style="font-size:14px;font-weight:500;margin-left:2px">m</span></span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:16px 12px 0 0">
+              <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">높이</span>
+              <span style="font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ m.h }}<span style="font-size:14px;font-weight:500;margin-left:2px">m</span></span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding:16px 0 0 0">
+              <span style="font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:#6b6a66">건축면적</span>
+              <span style="font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ m.area }}<span style="font-size:14px;font-weight:500;margin-left:2px">㎡</span></span>
+            </div>
+          </div>
+          <a href="#contact" style="align-self:flex-start;background:#17181a;color:#f4f3ef;padding:14px 22px;border-radius:999px;font-size:15px;font-weight:600;white-space:nowrap">{{ m.code }} 견적 문의</a>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;margin-top:20px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#e7e6e1">
+            <image-slot id="{{ m.key }}-int" shape="rect" src="{{ m.int }}" placeholder="실내 사진"></image-slot>
+          </div>
+          <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">실내</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#fff;border:1px solid rgba(23,24,26,.1)">
+            <image-slot id="{{ m.key }}-plan" shape="rect" fit="contain" src="{{ m.plan }}" placeholder="평면도"></image-slot>
+          </div>
+          <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">평면도</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#fff;border:1px solid rgba(23,24,26,.1)">
+            <image-slot id="{{ m.key }}-dwg" shape="rect" fit="contain" placeholder="설계도면 (입면·단면도)"></image-slot>
+          </div>
+          <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">설계도면</span>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+</section>
+
+<section id="compare" data-screen-label="Compare" style="background:#17181a;color:#f4f3ef;scroll-margin-top:68px">
+  <div style="max-width:1320px;margin:0 auto;padding:112px 32px">
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:48px">
+      <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#e6c98f">02 — SPECIFICATIONS</div>
+      <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em">사양 비교</h2>
+    </div>
+    <div style="overflow-x:auto">
+      <div style="min-width:720px;display:flex;flex-direction:column">
+        <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr 1fr 1fr 1fr;gap:16px;padding:0 0 14px;border-bottom:1px solid rgba(244,243,239,.4);font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:rgba(244,243,239,.65)">
+          <span>모델</span><span>구분</span><span>길이</span><span>폭</span><span>높이</span><span>건축면적</span>
+        </div>
+        <sc-for list="{{ models }}" as="m" hint-placeholder-count="6">
+          <button onClick="{{ m.onSelect }}" style="font:inherit;color:#f4f3ef;background:transparent;border:0;cursor:pointer;text-align:left;display:grid;grid-template-columns:1fr 1.4fr 1fr 1fr 1fr 1fr;gap:16px;padding:22px 0;border-bottom:1px solid rgba(244,243,239,.14);align-items:baseline;font-size:17px" style-hover="background:rgba(244,243,239,.05)">
+            <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">{{ m.code }}</span>
+            <span style="color:#e6c98f;font-weight:500">{{ m.title }}</span>
+            <span>{{ m.l }} m</span><span>{{ m.w }} m</span><span>{{ m.h }} m</span>
+            <span style="font-weight:700">{{ m.area }}㎡</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="interior" data-screen-label="Interior" style="max-width:1320px;margin:0 auto;padding:112px 32px;scroll-margin-top:68px">
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:48px">
+    <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">03 — INTERIOR</div>
+    <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em">인테리어 디테일</h2>
+  </div>
+  <div style="aspect-ratio:21/9;border-radius:6px;overflow:hidden;background:#e7e6e1;margin-bottom:56px">
+    <image-slot id="interior-main" shape="rect" src="img/interior.png" placeholder="실내 전경"></image-slot>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:56px">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h3 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.02em">표준배합시스템</h3>
+      <div style="display:flex;flex-direction:column;border-top:1px solid #17181a">
+        <sc-for list="{{ standard }}" as="s" hint-placeholder-count="10">
+          <div style="display:flex;gap:16px;padding:13px 0;border-bottom:1px solid rgba(23,24,26,.12);font-size:16px">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#9a6f25;padding-top:3px;min-width:22px">{{ s.n }}</span>
+            <span>{{ s.t }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h3 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.02em">선택배치시스템</h3>
+      <div style="display:flex;flex-direction:column;border-top:1px solid #17181a">
+        <sc-for list="{{ optional }}" as="s" hint-placeholder-count="4">
+          <div style="display:flex;gap:16px;padding:13px 0;border-bottom:1px solid rgba(23,24,26,.12);font-size:16px">
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#9a6f25;padding-top:3px;min-width:22px">{{ s.n }}</span>
+            <span>{{ s.t }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install" data-screen-label="Install" style="background:#e9e8e3;scroll-margin-top:68px">
+  <div style="max-width:1320px;margin:0 auto;padding:112px 32px">
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:48px">
+      <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">04 — INSTALLATION</div>
+      <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em">안전한 설치방법</h2>
+    </div>
+    <div style="aspect-ratio:3/1;border-radius:6px;overflow:hidden;background:#fff;margin-bottom:48px">
+      <image-slot id="install-main" shape="rect" fit="contain" src="img/install.png" placeholder="설치 과정 일러스트"></image-slot>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:40px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:14px;border-top:1px solid #17181a;padding-top:20px">
+          <span style="font:500 12px 'IBM Plex Mono',monospace;color:#9a6f25">STEP {{ s.n }}</span>
+          <h3 style="margin:0;font-size:22px;font-weight:700;letter-spacing:-0.02em">{{ s.title }}</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#3a3a38;text-wrap:pretty">{{ s.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:96px;display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+        <h3 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.02em">제작 · 시공 현장</h3>
+        <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">WORK IN PROGRESS</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+        <sc-for list="{{ workSlots }}" as="w" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="aspect-ratio:1/1;border-radius:4px;overflow:hidden;background:#dcdad4">
+              <image-slot id="{{ w.id }}" shape="rect" placeholder="{{ w.ph }}"></image-slot>
+            </div>
+            <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">{{ w.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cases" data-screen-label="Cases" style="max-width:1320px;margin:0 auto;padding:112px 32px;scroll-margin-top:68px">
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:48px">
+    <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#9a6f25">05 — PROJECTS</div>
+    <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em">시공 사례</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:16px">
+    <sc-for list="{{ cases }}" as="c" hint-placeholder-count="6">
+      <div style="aspect-ratio:4/3;border-radius:4px;overflow:hidden;background:#e7e6e1">
+        <image-slot id="{{ c.id }}" shape="rect" src="{{ c.src }}" placeholder="시공 사례 사진"></image-slot>
+      </div>
+    </sc-for>
+  </div>
+  <div style="margin-top:96px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+      <h3 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-0.02em">단지 개발 계획</h3>
+      <span style="font:500 12px 'IBM Plex Mono',monospace;color:#6b6a66">CAMPSITE · RESORT</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px">
+      <sc-for list="{{ sites }}" as="s" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="aspect-ratio:5/3;border-radius:4px;overflow:hidden;background:#e7e6e1">
+            <image-slot id="{{ s.id }}" shape="rect" src="{{ s.src }}" placeholder="단지 조감도"></image-slot>
+          </div>
+          <span style="font-size:15px;font-weight:600">{{ s.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="contact" data-screen-label="Contact" style="background:#17181a;color:#f4f3ef;scroll-margin-top:68px">
+  <div style="max-width:1320px;margin:0 auto;padding:112px 32px 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:64px">
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <div style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:#e6c98f">06 — CONTACT</div>
+      <h2 style="margin:0;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.03em;line-height:1.2">기술로 만들고,<br>품질로 증명합니다.</h2>
+      <p style="margin:0;font-size:17px;line-height:1.75;color:rgba(244,243,239,.78);max-width:520px">기획과 디자인, 설계, 생산에 이르기까지 모든 공정을 직접 관리하는 100% 국내 생산 시스템을 기반으로, 고객이 요구하는 공간의 가치와 완성도를 한 단계 높은 수준으로 구현하고 있습니다.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;border-top:1px solid rgba(244,243,239,.4)">
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid rgba(244,243,239,.14)">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:rgba(244,243,239,.6);padding-top:4px">TEL</span>
+        <span style="font-size:20px;font-weight:600">031-408-8856</span>
+      </div>
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid rgba(244,243,239,.14)">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:rgba(244,243,239,.6);padding-top:4px">HP</span>
+        <span style="font-size:20px;font-weight:600">010-8434-5277</span>
+      </div>
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid rgba(244,243,239,.14)">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:rgba(244,243,239,.6);padding-top:4px">EMAIL</span>
+        <span style="font-size:20px;font-weight:600;word-break:break-all">cwkencha1976@naver.com</span>
+      </div>
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid rgba(244,243,239,.14)">
+        <span style="font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:rgba(244,243,239,.6);padding-top:4px">ADDRESS</span>
+        <span style="font-size:20px;font-weight:600">경기도 화성시 팔탄면 무하로 149-52</span>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1320px;margin:0 auto;padding:24px 32px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:400 12px 'IBM Plex Mono',monospace;color:rgba(244,243,239,.5)">
+    <span>© 2026 우주하우스</span>
+    <span>MODULAR CAPSULE HOUSE</span>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;productView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;grid&quot;,&quot;list&quot;],&quot;default&quot;:&quot;grid&quot;,&quot;tsType&quot;:&quot;'grid'|'list'&quot;,&quot;section&quot;:&quot;레이아웃&quot;},&quot;heroLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;split&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full'|'split'&quot;,&quot;section&quot;:&quot;레이아웃&quot;}}">
+class Component extends DCLogic {
+  state = { filter: '전체', sel: 'bk7' };
+  detailRef = React.createRef();
+  models = [
+    { key:'bk7', code:'BK7', type:'주택형', title:'신형 주택형 우주선', l:'11.5', w:'3.3', h:'3.2', area:38,
+      desc:'bk7은 현재 회사에서 최신 개발한 제품으로 주방 배치를 추가하고 내부 배치를 자유롭게 선택하여 배치할 수 있어 더욱 좋은 경험을 할 수 있다.' },
+    { key:'k9', code:'K9', type:'주택형', title:'주택형 우주선', l:'11.5', w:'3.4', h:'3.4', area:39,
+      desc:'K9 제품 라인에서 가장 큰 사이즈로 초대형 크기를 보유하고 있다. 천창 및 면적은 사용자의 모든 방면의 사용 요구를 만족시킨다. 아연도금 구조 전체 알루미늄 케이스는 긴 시간 사용 자연환경을 느낄 수 있게 해줍니다.' },
+    { key:'k7', code:'K7', type:'영업형', title:'영업형 우주선', l:'11.5', w:'3.3', h:'3.2', area:38,
+      desc:'전체 강철 프레임과 플루오르 카본 페인팅 에어 알루미늄. 고전적인 흑백 두색을 이용하여 시각효과를 강화한다. 유려한 곡선의 외관 디자인으로 국내외 고급 조립식 건물에 첫발을 내딛는 데다 뛰어난 외모로 시장에서 선호받는다.' },
+    { key:'b5', code:'B5', type:'영업형', title:'영업형 우주선', l:'8.5', w:'3.3', h:'3.2', area:28,
+      desc:'b5 모델은 흑백의 플루오카본페인트 항공알루미늄 외장면을 채용하였다. 원가를 낮추면서도 기술적인 느낌을 주는 전망용 발코니가 있어 자연을 직접 즐길 수 있으며, 베스트셀러이다.' },
+    { key:'b7', code:'B7', type:'확장형', title:'확장형 우주선', l:'11.5', w:'3.3', h:'3.2', area:38,
+      desc:'B7은 성능 대비 성능이 우수한 제품으로 본체는 열도금아연강, 플루오카본페인트 항공알루미늄을 사용하였으며 주방설계와 합리적인 평면배치로 넓은 공간의 편안함, 넓은 시야의 파노라마 선창, 슈퍼 공간의 확장성을 특징으로 하였다.' },
+    { key:'k5', code:'K5', type:'확장형', title:'확장형 우주선', l:'8.5', w:'3.3', h:'3.2', area:28,
+      desc:'본체는 열도금아연강 + 플루오카본도료를 사용한 항공알루미늄으로 B7 레이아웃설계를 참고하여 크기를 줄였으며 보다 경제적이고 실속있다. 내부 배치: 주방 + 거실 + 침실 + 화장실 조합으로 민박, 주거, 사무 등에 적합합니다.' },
+  ];
+  select = (key) => {
+    this.setState({ sel: key }, () => {
+      const el = this.detailRef.current;
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 76, behavior: 'smooth' });
+    });
+  };
+  renderVals() {
+    const { filter, sel } = this.state;
+    const view = this.props.productView ?? 'grid';
+    const hero = this.props.heroLayout ?? 'full';
+    const enrich = m => ({ ...m, dims: `${m.l}×${m.w}×${m.h}m`,
+      side:`img/${m.key}-side.png`, ext:`img/${m.key}-ext.png`, int:`img/${m.key}-int.png`, plan:`img/${m.key}-plan.png`,
+      onSelect: () => this.select(m.key),
+      display: m.key === sel ? 'flex' : 'none',
+      cardBorder: m.key === sel ? '#17181a' : 'rgba(23,24,26,.1)',
+      cardShadow: m.key === sel ? '0 0 0 1px #17181a' : 'none',
+      rowBg: m.key === sel ? '#fff' : 'transparent',
+      showPhoto: !(m.key === sel && this.state.view3d),
+      show3d: m.key === sel && !!this.state.view3d,
+      src3d: `capsule-3d.html?m=${m.key}` });
+    const v3 = !!this.state.view3d;
+    const all = this.models.map(enrich);
+    const filters = ['전체','주택형','영업형','확장형'].map(label => {
+      const on = label === filter;
+      return { label, count: label === '전체' ? all.length : all.filter(m => m.type === label).length,
+        bg: on ? '#17181a' : 'transparent', color: on ? '#f4f3ef' : '#17181a', border: on ? '#17181a' : 'rgba(23,24,26,.25)',
+        onClick: () => this.setState({ filter: label }) };
+    });
+    const standard = ['표준내진구조체계','초저에너지 보온 구조 체계','표준 색상 쉘 모듈 · 사용자 정의 색상 가능','표준 컬러 인테리어 모듈 · 사용자 정의 인테리어 완성 가능','표준 컬러 캐비닛 모듈 · 맞춤형 캐비닛 소재','전경 중공 low-e 유리','친환경 바닥','전 주택 조명','브랜드 고급 욕실 일체형','고급 안전 문'].map((t,i)=>({ n:String(i+1).padStart(2,'0'), t }));
+    const optional = ['에어컨, 온수기, 신선한 공기 시스템 설치','온돌 시스템 설치','지능형 제어 시스템 선택 설치','선루프 시스템 설치'].map((t,i)=>({ n:String(i+1).padStart(2,'0'), t }));
+    return {
+      heroFull: hero === 'full', heroSplit: hero === 'split',
+      gridView: view === 'grid', listView: view === 'list',
+      filters, models: all,
+      visible: filter === '전체' ? all : all.filter(m => m.type === filter),
+      detailRef: this.detailRef,
+      showPhotoView: () => this.setState({ view3d: false }),
+      show3dView: () => this.setState({ view3d: true }),
+      photoBtnBg: v3 ? 'transparent' : '#f4f3ef', photoBtnColor: v3 ? '#f4f3ef' : '#17181a',
+      btn3dBg: v3 ? '#f4f3ef' : 'transparent', btn3dColor: v3 ? '#17181a' : '#f4f3ef',
+      standard, optional,
+      steps: [
+        { n:'01', title:'운송 단계', body:'제품의 표준조달계약에는 운송료가 포함됩니다. 회사에서 통일적으로 화물차를 안배하여 프로젝트 현장까지 운송합니다. 표준화물차는 길이 17.5m의 하프트레일러이고 운송너비는 3.3m이며, 운송에 사용된 높이가 4.2m보다 크지 않아 전국 고속도로를 자유롭게 통행할 수 있습니다.' },
+        { n:'02', title:'기중기 조립 단계', body:'화물이 현장에 도착한 후 고객은 현지의 기중기와 연락하여 봉사해야 합니다. 회사 기술진이 미리 도착해서 현장 지도를 합니다. 6~12톤의 무게를 들어 올리는 전체 시리즈 제품은 25톤급 이상의 기중기를 권장합니다.' },
+        { n:'03', title:'설치 단계', body:'제품을 설치하기 전에 고객은 반드시 회사의 제품 표준에 근거해야 합니다. 수도, 전기, 오수 배수관과 하중 견딜 기초를 완성하는 전기 설계도 현장 공사를 진행하며, 회사 기술자의 지도하에 설치점까지 정확하게 위치를 잡습니다. 수도와 전기를 연결한 후 고객의 검수를 받습니다.' },
+      ],
+      workSlots: [
+        { id:'work-1', label:'프레임 제작', ph:'작업사진 · 프레임' },
+        { id:'work-2', label:'외장 · 도장', ph:'작업사진 · 외장' },
+        { id:'work-3', label:'내부 마감', ph:'작업사진 · 내부' },
+        { id:'work-4', label:'운송 · 설치', ph:'작업사진 · 설치' },
+      ],
+      cases: [1,2,3,4,5,6].map(i => ({ id:`case-${i}`, src:`img/case${i}.png` })),
+      sites: [
+        { id:'site-camp', src:'img/camp.png', label:'캠프장 계획' },
+        { id:'site-resort', src:'img/resort.png', label:'프리미엄 리조트 개발 시안' },
+        { id:'site-island', src:'img/island.png', label:'프리미엄 리조트 개발 시안 · 수변' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

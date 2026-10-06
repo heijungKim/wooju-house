@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#e7e6e1}three-d-stage{display:block;width:100vw;height:100vh}three-d-stage:not(:defined){visibility:hidden}</style>
+</head><body>
+<three-d-stage name="wooju-capsule" background="#e7e6e1" autorotate></three-d-stage>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const SPECS = {
+  bk7:{L:11.5,W:3.3,H:3.2}, k9:{L:11.5,W:3.4,H:3.4,sky:true}, k7:{L:11.5,W:3.3,H:3.2},
+  b5:{L:8.5,W:3.3,H:3.2,deck:true}, b7:{L:11.5,W:3.3,H:3.2,deck:true}, k5:{L:8.5,W:3.3,H:3.2}
+};
+const key = new URLSearchParams(location.search).get('m') || 'bk7';
+const S = SPECS[key] || SPECS.bk7;
+const stage = document.querySelector('three-d-stage');
+stage.setAttribute('name', 'wooju-' + key);
+const { THREE } = await stage.ready;
+
+const M = {
+  shell: new THREE.MeshStandardMaterial({ name:'aluminium_shell', color:0xeceeed, roughness:0.32, metalness:0.3 }),
+  glass: new THREE.MeshStandardMaterial({ name:'lowe_glass', color:0x22303a, roughness:0.08, metalness:0.35, transparent:true, opacity:0.62, side:THREE.DoubleSide }),
+  frame: new THREE.MeshStandardMaterial({ name:'steel_frame', color:0x2a2c2f, roughness:0.55, metalness:0.3 }),
+  floor: new THREE.MeshStandardMaterial({ name:'floor', color:0xcfc6b6, roughness:0.8 }),
+  wood:  new THREE.MeshStandardMaterial({ name:'deck_wood', color:0x8f6f4c, roughness:0.75 }),
+};
+const g = new THREE.Group(); g.name = 'capsule_' + key;
+const add = (geo, mat, name, x=0, y=0, z=0) => { const m = new THREE.Mesh(geo, mat); m.name = name; m.position.set(x,y,z); m.castShadow = m.receiveShadow = true; g.add(m); return m; };
+
+const legH = 0.45, hb = S.H - legH, W = S.W, t = 0.09, rt = 0.95, rb = 0.4;
+const deckL = S.deck ? 1.6 : 0;
+const bodyL = S.L - deckL;
+const x0 = -S.L/2, xb = x0 + bodyL; // body spans x0..xb
+
+function rr(w, h, rtop, rbot, ox=0, oy=0) {
+  const s = new THREE.Shape(), l = ox - w/2, r = ox + w/2, b = oy, tp = oy + h;
+  s.moveTo(l + rbot, b); s.lineTo(r - rbot, b); s.quadraticCurveTo(r, b, r, b + rbot);
+  s.lineTo(r, tp - rtop); s.quadraticCurveTo(r, tp, r - rtop, tp);
+  s.lineTo(l + rtop, tp); s.quadraticCurveTo(l, tp, l, tp - rtop);
+  s.lineTo(l, b + rbot); s.quadraticCurveTo(l, b, l + rbot, b); return s;
+}
+const outer = rr(W, hb, rt, rb), inner = rr(W - 2*t, hb - 2*t, rt - t, rb - t*0.6, 0, t);
+const ring = outer.clone(); ring.holes.push(new THREE.Path(inner.getPoints(48)));
+// shell tube along X
+const shellGeo = new THREE.ExtrudeGeometry(ring, { depth: bodyL, bevelEnabled:false, curveSegments:32 });
+const shell = add(shellGeo, M.shell, 'shell');
+shell.rotation.y = Math.PI/2; shell.position.set(x0, legH, 0);
+// end frames (thicker rim) and glass, inset
+const rimGeo = new THREE.ExtrudeGeometry(ring, { depth: 0.12, bevelEnabled:true, bevelThickness:0.03, bevelSize:0.03, bevelSegments:3, curveSegments:32 });
+[x0, xb - 0.12].forEach((x,i) => { const r = add(rimGeo, M.shell, 'end_rim_'+i); r.rotation.y = Math.PI/2; r.position.set(x, legH, 0); });
+const glassGeo = new THREE.ShapeGeometry(inner, 32);
+[x0 + 0.35, xb - 0.35].forEach((x,i) => { const gl = add(glassGeo, M.glass, 'end_glass_'+i); gl.rotation.y = Math.PI/2; gl.position.set(x, legH, 0); gl.castShadow = false; });
+// floor slab inside
+add(new THREE.BoxGeometry(bodyL - 0.2, 0.06, W - 2*t - 0.1), M.floor, 'floor', (x0+xb)/2, legH + t + 0.03, 0);
+// side panorama windows (front side +z) and back side
+const flatB = legH + rb + 0.05, flatT = legH + hb - rt - 0.02, wh = flatT - flatB;
+const winL = Math.min(3.2, bodyL*0.32);
+add(new THREE.BoxGeometry(winL, wh, 0.02), M.glass, 'side_window_front', xb - 0.5 - winL/2, flatB + wh/2, W/2 + 0.006).castShadow = false;
+add(new THREE.BoxGeometry(winL*0.8, wh, 0.02), M.glass, 'side_window_back', x0 + 0.5 + winL*0.4, flatB + wh/2, -W/2 - 0.006).castShadow = false;
+// door
+const doorX = x0 + bodyL*0.42;
+add(new THREE.BoxGeometry(0.95, Math.min(2.1, wh + 0.3), 0.025), M.frame, 'door', doorX, flatB - 0.05 + Math.min(2.1, wh+0.3)/2, W/2 + 0.008);
+// accent seam lines
+for (let i=1;i<6;i++){ const x = x0 + bodyL*i/6; if (Math.abs(x - doorX) < 0.7) continue; add(new THREE.BoxGeometry(0.012, wh*0.9, 0.006), M.frame, 'seam_'+i, x, flatB + wh/2, W/2 + 0.004); }
+// roof skylight (K9)
+if (S.sky) add(new THREE.BoxGeometry(bodyL*0.4, 0.02, W - 2*rt + 0.4), M.glass, 'skylight', (x0+xb)/2, legH + hb + 0.006, 0).castShadow = false;
+// steel base frame + legs
+add(new THREE.BoxGeometry(bodyL - 0.6, 0.18, W - 0.9), M.frame, 'base_frame', (x0+xb)/2, legH - 0.09, 0);
+const legX = [x0 + 0.6, (x0+xb)/2, xb - 0.6];
+legX.forEach((x,i) => [-1,1].forEach(s => add(new THREE.BoxGeometry(0.2, legH - 0.18, 0.2), M.frame, `leg_${i}_${s>0?'f':'b'}`, x, (legH-0.18)/2, s*(W/2 - 0.6))));
+// entry steps
+for (let i=0;i<3;i++) add(new THREE.BoxGeometry(1.0, 0.04, 0.28), M.shell, 'step_'+i, doorX, legH - 0.12 - i*0.13, W/2 + 0.18 + i*0.28);
+// balcony deck (B5/B7)
+if (S.deck) {
+  const dx = xb + deckL/2;
+  add(new THREE.BoxGeometry(deckL, 0.1, W - 0.1), M.wood, 'deck', dx, legH + 0.05, 0);
+  add(new THREE.BoxGeometry(deckL, 0.18, W - 0.9), M.frame, 'deck_frame', dx, legH - 0.09, 0);
+  [-1,1].forEach(s => add(new THREE.BoxGeometry(0.2, legH - 0.18, 0.2), M.frame, 'deck_leg_'+s, S.L/2 - 0.3, (legH-0.18)/2, s*(W/2 - 0.6)));
+  const railH = 1.05;
+  add(new THREE.BoxGeometry(0.02, railH, W - 0.2), M.glass, 'rail_end', S.L/2 - 0.06, legH + 0.1 + railH/2, 0).castShadow = false;
+  [-1,1].forEach(s => add(new THREE.BoxGeometry(deckL - 0.1, railH, 0.02), M.glass, 'rail_side_'+s, dx, legH + 0.1 + railH/2, s*(W/2 - 0.08)).castShadow = false);
+  // roof canopy continuing over deck
+  const can = add(new THREE.BoxGeometry(deckL*0.7, 0.08, W - 0.6), M.shell, 'canopy', xb + deckL*0.35, legH + hb - 0.06, 0);
+}
+stage.setObject(g);
+</script>
+</body></html>
