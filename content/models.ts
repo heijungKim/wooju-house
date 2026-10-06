@@ -108,10 +108,10 @@ export const installSteps = [
 
 /** 제작·시공 현장 작업사진. src를 채우면 사진이 표시됨. */
 export const workPhotos: { label: string; placeholder: string; src?: string }[] = [
-  { label: "프레임 제작", placeholder: "작업사진 · 프레임" },
-  { label: "외장 · 도장", placeholder: "작업사진 · 외장" },
-  { label: "내부 마감", placeholder: "작업사진 · 내부" },
-  { label: "운송 · 설치", placeholder: "작업사진 · 설치" },
+  { label: "프레임 제작", placeholder: "작업사진 · 프레임", src: "/img/work-1.jpg" },
+  { label: "외장 · 도장", placeholder: "작업사진 · 외장", src: "/img/work-2.jpg" },
+  { label: "내부 마감", placeholder: "작업사진 · 내부", src: "/img/work-3.jpg" },
+  { label: "운송 · 설치", placeholder: "작업사진 · 설치", src: "/img/work-4.jpg" },
 ];
 
 export const cases = [1, 2, 3, 4, 5, 6].map((i) => `/img/case${i}.jpg`);
