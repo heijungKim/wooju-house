@@ -1,4 +1,4 @@
-import { cases, contact, installSteps, optionalSystems, sites, standardSystems, workPhotos } from "@/content/models";
+import { cases, contact, installSteps, sites, workPhotos } from "@/content/models";
 import { Caption, Eyebrow, Photo, SectionTitle, SubTitle } from "./ui";
 
 function SectionHead({ eyebrow, title, dark = false }: { eyebrow: string; title: string; dark?: boolean }) {
@@ -16,37 +16,6 @@ function SubHead({ title, meta }: { title: string; meta: string }) {
       <SubTitle>{title}</SubTitle>
       <Caption>{meta}</Caption>
     </div>
-  );
-}
-
-function NumberedList({ title, items }: { title: string; items: { n: string; t: string }[] }) {
-  return (
-    <div className="flex flex-col gap-5">
-      <SubTitle>{title}</SubTitle>
-      <div className="flex flex-col border-t border-ink">
-        {items.map((s) => (
-          <div key={s.n} className="flex gap-4 border-b border-[rgba(23,24,26,.12)] py-[13px] text-[16px]">
-            <span className="min-w-[22px] pt-[3px] font-mono text-[12px] font-medium text-accent">{s.n}</span>
-            <span>{s.t}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export function Interior() {
-  return (
-    <section id="interior" className="mx-auto max-w-[1320px] scroll-mt-[68px] px-8 py-28">
-      <SectionHead eyebrow="03 — INTERIOR" title="인테리어 디테일" />
-      <div className="mb-14 aspect-[21/9] overflow-hidden rounded-md bg-well">
-        <Photo src="/img/interior.jpg" alt="실내 전경" sizes="(min-width: 1320px) 1256px, 100vw" />
-      </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-14">
-        <NumberedList title="표준배합시스템" items={standardSystems} />
-        <NumberedList title="선택배치시스템" items={optionalSystems} />
-      </div>
-    </section>
   );
 }
 
