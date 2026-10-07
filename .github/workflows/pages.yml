@@ -29,7 +29,8 @@ jobs:
       - run: npx next build
         env:
           GITHUB_PAGES: "1"
-          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # 커스텀 도메인(wj-house.kr)은 루트에서 서비스하므로 하위 경로 없음
+          PAGES_BASE_PATH: ""
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
