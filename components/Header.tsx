@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const nav = [
@@ -31,9 +32,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-[rgba(23,24,26,.1)] bg-[rgba(244,243,239,.92)] backdrop-blur-[10px]">
       <div className="mx-auto flex h-[60px] max-w-[1320px] items-center justify-between gap-6 px-5 sm:px-8 md:h-[68px]">
-        <a href="#top" onClick={() => setOpen(false)} className="group flex flex-none items-baseline gap-2.5 whitespace-nowrap">
-          <span className="text-[19px] font-extrabold tracking-[-0.02em] group-hover:text-accent md:text-[20px]">우주하우스</span>
-          <span className="font-mono text-[11px] font-medium tracking-[.08em] text-muted">WOOJU HOUSE</span>
+        <a href="#top" onClick={() => setOpen(false)} className="flex flex-none items-center" aria-label="우주하우스 홈">
+          <Image src="/logo.png" alt="우주하우스 WOOJU HOUSE" width={720} height={144} priority className="h-9 w-auto md:h-10" />
         </a>
         <nav className="hidden min-w-0 gap-[clamp(14px,2vw,28px)] whitespace-nowrap text-[15px] font-medium md:flex">
           {nav.map((n) => (
