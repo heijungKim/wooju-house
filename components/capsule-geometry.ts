@@ -81,19 +81,33 @@ export function buildCapsule(S: CapsuleSpec) {
   const zf = W / 2; // 앞면(문 쪽)
 
   // ── 지붕·바닥 슬래브 + 어두운 테두리 띠
-  add(slab(L, roofT, W, 0.32, 0.1), M.shell, "roof", 0, y2, 0);
-  add(slab(L, floorT, W, 0.1, 0.3), M.shell, "floor_slab", 0, y0, 0);
-  add(new RoundedBoxGeometry(L - 0.5, 0.05, W + 0.01, 2, 0.02), M.trim, "roof_trim", 0, y2 + 0.005, 0);
-  add(new RoundedBoxGeometry(L - 0.5, 0.05, W + 0.01, 2, 0.02), M.trim, "floor_trim", 0, y1 - 0.005, 0);
+  const rPlan = 0.7; // 위에서 본 끝 모서리 반지름
+  add(planSlab(L, roofT, W, rPlan, 0.1), M.shell, "roof", 0, y2, 0);
+  add(planSlab(L, floorT, W, rPlan, 0.11), M.shell, "floor_slab", 0, y0, 0);
+  add(planSlab(L - 0.03, 0.05, W + 0.014, rPlan, 0.02), M.trim, "roof_trim", 0, y2 - 0.015, 0);
+  add(planSlab(L - 0.03, 0.05, W + 0.014, rPlan, 0.02), M.trim, "floor_trim", 0, y1 - 0.035, 0);
+  /** 위에서 본 모양(x, z)을 세로로 세운 기둥형 메시 */
+  const vprism = (x0: number, x1: number, zHalf: number, rOuter: number, outerAtX0: boolean, yb: number, h: number, mat: THREE.Material, name: string, ring = 0) => {
+    const ax = Math.min(x0, x1), bx = Math.max(x0, x1);
+    const atLeft = outerAtX0 === x0 < x1;
+    const rad = (d: number) => (atLeft ? [rOuter - d, 0, 0, rOuter - d] : [0, rOuter - d, rOuter - d, 0]).map((r) => Math.max(r, 0));
+    const pts = (d: number): [number, number][] => [[ax + d, -zHalf + d], [bx - d, -zHalf + d], [bx - d, zHalf - d], [ax + d, zHalf - d]];
+    const shape = roundedShape(pts(0), rad(0));
+    if (ring > 0) shape.holes.push(new THREE.Path(roundedShape(pts(ring), rad(ring)).getPoints(12)));
+    const geo = new THREE.ExtrudeGeometry(shape, { depth: h, bevelEnabled: false, curveSegments: 14 });
+    geo.rotateX(-Math.PI / 2);
+    return add(geo, mat, name, 0, yb, 0);
+  };
 
   // ── 흰 몸체: 측면에서 본 사다리꼴(아래가 넓음)을 폭 방향으로 압출
   const bl = lay.left, br = lay.right;
   const sx = (fromLeft: number) => xL + fromLeft;
-  const solidLB = bl ? sx(bl.bottom) : xL + inset;
-  const solidLT = bl ? sx(bl.top) : xL + inset;
-  const solidRB = br ? xR - br.bottom : xR - inset;
-  const solidRT = br ? xR - br.top : xR - inset;
-  const rL = bl ? 0.42 : 0.04, rR = br ? 0.42 : 0.04;
+  const capD = 0.62, rCap = rPlan - inset; // 막힌 끝 캡 깊이·반지름
+  const solidLB = bl ? sx(bl.bottom) : xL + inset + capD - 0.02;
+  const solidLT = bl ? sx(bl.top) : xL + inset + capD - 0.02;
+  const solidRB = br ? xR - br.bottom : xR - inset - capD + 0.02;
+  const solidRT = br ? xR - br.top : xR - inset - capD + 0.02;
+  const rL = bl ? 0.6 : 0.02, rR = br ? 0.6 : 0.02;
   const solidPts = (d: number): [number, number][] => [
     [solidLB - (bl ? d : 0), y1], [solidRB + (br ? d : 0), y1], [solidRT + (br ? d : 0), y2], [solidLT - (bl ? d : 0), y2],
   ];
@@ -101,6 +115,20 @@ export function buildCapsule(S: CapsuleSpec) {
   const solidGeo = new THREE.ExtrudeGeometry(roundedShape(solidPts(0), [rL, rR, rR, rL]), { depth: wallD, bevelEnabled: false, curveSegments: 10 });
   solidGeo.translate(0, 0, -wallD / 2);
   add(solidGeo, M.shell, "body");
+  if (!bl) vprism(xL + inset, xL + inset + capD, (W - 0.02) / 2, rCap, true, y1, wallH, M.shell, "end_cap_l");
+  if (!br) vprism(xR - inset, xR - inset - capD, (W - 0.02) / 2, rCap, true, y1, wallH, M.shell, "end_cap_r");
+  // 흰 패널의 굴곡선(유리 경계를 따라 안쪽으로 들어간 선)
+  if (bl || br) {
+    const ccw = solidPts(0);
+    const inner = (d: number) => offsetConvex(ccw, -d);
+    const gr = [bl ? 0.35 : 0.02, br ? 0.35 : 0.02, br ? 0.3 : 0.02, bl ? 0.3 : 0.02];
+    const groove = roundedShape(inner(0.3), gr);
+    groove.holes.push(new THREE.Path(roundedShape(inner(0.325), gr.map((r) => Math.max(r - 0.025, 0.005))).getPoints(10)));
+    for (const z of [1, -1]) {
+      const gg = new THREE.ExtrudeGeometry(groove, { depth: 0.004, bevelEnabled: false, curveSegments: 10 });
+      add(gg, M.seam, "panel_groove", 0, 0, z > 0 ? (W - 0.02) / 2 : -(W - 0.02) / 2 - 0.004);
+    }
+  }
   // 유리와 맞닿는 둥근 검은 테두리(가스켓)
   if (bl || br) {
     const rimD = wallD - 0.012;
@@ -122,29 +150,21 @@ export function buildCapsule(S: CapsuleSpec) {
     const glassEnd = end + dir * (deck > 0 ? deck : inset); // 끝 유리벽 x
     const xb = end + dir * b.bottom, xt = end + dir * b.top; // 몸체 경계
 
-    // 유리 볼륨 (측면 사다리꼴 → 폭 방향 압출)
-    const s = new THREE.Shape();
-    s.moveTo(glassEnd, y1);
-    s.lineTo(xt, y1);
-    s.lineTo(xt, y2);
-    s.lineTo(glassEnd, y2);
-    s.closePath();
+    // 유리 볼륨: 위에서 본 끝 모서리가 둥글게 휜 유리 (몸체가 경사 바깥쪽을 가림)
     const gd = W - 0.06;
-    const gGeo = new THREE.ExtrudeGeometry(s, { depth: gd, bevelEnabled: false });
-    gGeo.translate(0, 0, -gd / 2);
-    const gm = add(gGeo, M.glass, `glass_${side}`);
-    gm.renderOrder = 2;
+    const rg = deck > 0 ? 0 : rPlan - inset - 0.03;
+    vprism(glassEnd, xt, gd / 2, rg, true, y1, wallH, M.glass, `glass_${side}`).renderOrder = 2;
+    vprism(glassEnd, xt, gd / 2 - 0.01, Math.max(rg - 0.01, 0), true, y1, 0.02, M.floor, `int_floor_${side}`);
 
-    // 실내 바닥
-    add(box(Math.abs(xt - glassEnd), 0.02, gd - 0.02), M.floor, `int_floor_${side}`, (glassEnd + xt) / 2, y1 + 0.01, 0);
-
-    // 프레임: 끝 모서리 기둥, 경사 프레임, 중간 멀리언
+    // 프레임: 휜 유리 양끝 기둥, 중간 멀리언
+    add(box(0.06, wallH, 0.06), M.trim, `end_post_${side}`, glassEnd, y1 + wallH / 2, gd / 2 - rg);
+    add(box(0.06, wallH, 0.06), M.trim, `end_post_${side}`, glassEnd, y1 + wallH / 2, -(gd / 2 - rg));
     for (const z of [1, -1]) {
-      add(box(0.07, wallH, 0.07), M.trim, `post_${side}`, glassEnd, y1 + wallH / 2, z * (gd / 2));
-      const span = Math.abs(xb - glassEnd);
+      add(box(0.06, wallH, 0.06), M.trim, `post_${side}`, glassEnd + dir * rg, y1 + wallH / 2, z * (gd / 2));
+      const span = Math.abs(xb - glassEnd - dir * rg);
       const n = Math.floor(span / 1.3);
       for (let i = 1; i <= n; i++) {
-        const mx = glassEnd + (dir * span * i) / (n + 1);
+        const mx = glassEnd + dir * rg + (dir * span * i) / (n + 1);
         add(box(0.04, wallH, 0.04), M.trim, `mullion_${side}`, mx, y1 + wallH / 2, z * (gd / 2));
       }
     }
@@ -166,51 +186,25 @@ export function buildCapsule(S: CapsuleSpec) {
 
     // 데크(테라스): 나무 바닥 + 유리 난간 + 모서리 기둥
     if (deck > 0) {
-      const dx0 = end + dir * 0.06, dxc = (dx0 + glassEnd) / 2, dl = Math.abs(glassEnd - dx0);
-      add(box(dl, 0.03, W - 0.1), M.wood, `deck_${side}`, dxc, y1 + 0.015, 0);
-      const railH = 1.05;
-      add(box(0.02, railH, W - 0.16), M.rail, `rail_end_${side}`, dx0 + dir * 0.03, y1 + railH / 2, 0).renderOrder = 3;
+      const dx0 = end + dir * 0.06, rd = rPlan - 0.08;
+      vprism(dx0, glassEnd, W / 2 - 0.06, rd, true, y1, 0.03, M.wood, `deck_${side}`);
+      const railH = 1.05, rz = W / 2 - 0.1;
+      vprism(dx0 + dir * 0.04, glassEnd, rz, rd - 0.05, true, y1, railH, M.rail, `rail_${side}`, 0.02).renderOrder = 3;
+      vprism(dx0 + dir * 0.03, glassEnd, rz + 0.01, rd - 0.04, true, y1 + railH, 0.04, M.trim, `rail_cap_${side}`, 0.045);
       for (const z of [1, -1]) {
-        add(box(dl, railH, 0.02), M.rail, `rail_side_${side}`, dxc, y1 + railH / 2, z * (W / 2 - 0.08)).renderOrder = 3;
-        add(box(dl, 0.035, 0.05), M.trim, `rail_cap_${side}`, dxc, y1 + railH, z * (W / 2 - 0.08));
-        add(box(0.07, wallH, 0.07), M.trim, `deck_post_${side}`, dx0 + dir * 0.05, y1 + wallH / 2, z * (W / 2 - 0.1));
+        add(box(0.07, wallH, 0.07), M.trim, `deck_post_${side}`, dx0 + dir * (rd - 0.05), y1 + wallH / 2, z * rz);
       }
-      add(box(0.02, 0.035, W - 0.16), M.trim, `rail_cap_end_${side}`, dx0 + dir * 0.03, y1 + railH, 0);
     }
   };
   if (bl) bay("left", bl);
   if (br) bay("right", br);
 
-  // ── 막힌 끝단 디테일
-  if (!bl) {
-    if (lay.roundEndWindow) {
-      // B5: 끝면의 둥근 검은 창 + 옆면으로 이어지는 띠
-      const rw = W - 0.7, rh = wallH - 0.35, r = 0.45;
-      const s = new THREE.Shape();
-      s.moveTo(-rw / 2 + r, -rh / 2);
-      s.lineTo(rw / 2 - r, -rh / 2);
-      s.quadraticCurveTo(rw / 2, -rh / 2, rw / 2, -rh / 2 + r);
-      s.lineTo(rw / 2, rh / 2 - r);
-      s.quadraticCurveTo(rw / 2, rh / 2, rw / 2 - r, rh / 2);
-      s.lineTo(-rw / 2 + r, rh / 2);
-      s.quadraticCurveTo(-rw / 2, rh / 2, -rw / 2, rh / 2 - r);
-      s.lineTo(-rw / 2, -rh / 2 + r);
-      s.quadraticCurveTo(-rw / 2, -rh / 2, -rw / 2 + r, -rh / 2);
-      const eg = new THREE.ExtrudeGeometry(s, { depth: 0.05, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02, bevelSegments: 2 });
-      const ew = add(eg, M.darkGlass, "end_window", xL + inset - 0.04, y1 + wallH / 2, 0);
-      ew.rotation.y = -Math.PI / 2;
-      for (const z of [1, -1]) {
-        const strip = new RoundedBoxGeometry(0.55, rh, 0.04, 4, 0.02);
-        add(strip, M.darkGlass, "end_window_side", xL + inset + 0.3, y1 + wallH / 2, z * (wallD / 2 + 0.012));
-      }
-    } else if (lay.endPanel) {
-      // K9: 끝단 회색 패널 (옆면 + 끝면)
-      for (const z of [1, -1]) add(box(0.62, wallH - 0.5, 0.02), M.greyPanel, "end_panel_side", xL + inset + 0.45, y1 + wallH / 2, z * (wallD / 2 + 0.008));
-      add(box(0.02, wallH - 0.5, W - 0.9), M.greyPanel, "end_panel", xL + inset - 0.012, y1 + wallH / 2, 0);
-    }
+  // ── 막힌 끝단 디테일: 둥근 캡을 감싸는 검은 유리(B5) / 회색 패널(K9)
+  if (!bl && lay.roundEndWindow) {
+    vprism(xL + inset - 0.012, xL + inset + capD - 0.08, (W - 0.02) / 2 + 0.012, rCap + 0.012, true, y1 + 0.18, wallH - 0.36, M.darkGlass, "end_window", 0.03);
   }
-  if (!br && lay.endPanel) {
-    add(box(0.02, wallH - 0.5, W - 0.9), M.greyPanel, "end_panel_r", xR - inset + 0.012, y1 + wallH / 2, 0);
+  if (!bl && lay.endPanel) {
+    vprism(xL + inset - 0.012, xL + inset + capD - 0.05, (W - 0.02) / 2 + 0.012, rCap + 0.012, true, y1 + 0.25, wallH - 0.5, M.greyPanel, "end_panel", 0.03);
   }
 
   // ── K9 옆면 큰 창 (왼쪽 위·아래 모서리를 깎은 모양)
@@ -301,6 +295,16 @@ function slab(L: number, T: number, W: number, rTop: number, rBot: number) {
     { depth: W - 2 * b, bevelEnabled: true, bevelSize: b, bevelThickness: b, bevelSegments: 4, curveSegments: 12 },
   );
   geo.translate(0, b, -(W - 2 * b) / 2);
+  return geo;
+}
+
+/** 위에서 본 모양이 끝 둥근 사각형인 판. 모서리는 bevel로 둥글게. y 기준 = 아래면 */
+function planSlab(L: number, T: number, W: number, r: number, b: number) {
+  const w = L - 2 * b, d = W - 2 * b, rr = Math.max(r - b, 0.01);
+  const shape = roundedShape([[-w / 2, -d / 2], [w / 2, -d / 2], [w / 2, d / 2], [-w / 2, d / 2]], [rr, rr, rr, rr]);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: Math.max(T - 2 * b, 0.001), bevelEnabled: true, bevelSize: b, bevelThickness: b, bevelSegments: 5, curveSegments: 16 });
+  geo.rotateX(-Math.PI / 2);
+  geo.translate(0, b, 0);
   return geo;
 }
 
